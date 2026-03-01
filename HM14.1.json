@@ -1,0 +1,572 @@
+{
+  "info": {
+    "_postman_id": "951ca193-6b6b-485e-89bd-c4a17e17d581",
+    "name": "QA_auto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50434350",
+    "_collection_link": "https://go.postman.co/collection/50434350-951ca193-6b6b-485e-89bd-c4a17e17d581?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auto",
+      "item": [
+        {
+          "name": "Registration request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const schema = {",
+                  "  \"type\": \"object\",",
+                  "  \"properties\": {",
+                  "    \"status\": { \"type\": \"string\" },",
+                  "    \"data\": {",
+                  "      \"type\": \"object\",",
+                  "      \"properties\": {",
+                  "        \"userId\": { \"type\": \"integer\" },",
+                  "        \"photoFilename\": { \"type\": \"string\" },",
+                  "        \"distanceUnits\": { \"type\": \"string\" },",
+                  "        \"currency\": { \"type\": \"string\" }",
+                  "      },",
+                  "      \"required\": [\"userId\", \"photoFilename\", \"distanceUnits\", \"currency\"]",
+                  "    }",
+                  "  },",
+                  "  \"required\": [\"status\", \"data\"]",
+                  "};",
+                  "",
+                  "// Schema validation test",
+                  "pm.test(\"Response JSON Schema\", function () {",
+                  "    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+                  "});",
+                  "",
+                  "// Check email value",
+                  "pm.test(\"The email in the response has a valid format\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if(jsonData.data.email) {",
+                  "        pm.expect(jsonData.data.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "    }",
+                  "});",
+                  "",
+                  "// 4. Save userId",
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.environment.set(\"userId\", jsonData.data.userId);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\",\n  \"repeatPassword\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Data type validation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Очікуємо, що сервер відхилить ім'я зі статусом 400",
+                  "pm.test(\"Статус код 400 (Помилка валідації)\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "// Перевірка типу даних для локалізації",
+                  "pm.test(\"Повідомлення про помилку є рядком (string)\", function () {",
+                  "    // Перетворюємо відповідь сервера на об'єкт",
+                  "    const jsonData = pm.response.json();",
+                  "    ",
+                  "    // Перевіряємо, що це саме текст (string)",
+                  "    pm.expect(jsonData.message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"photo\": \"default-user.png\",\n  \"name\": \"12345\",\n  \"lastName\": \"QA\",\n  \"dateBirth\": \"1990-06-23T00:00:00.000Z\",\n  \"country\": \"Ukraine\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Перевірка успіху",
+                  "pm.test(\"Статус код 200: Сесію успішно завершено\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check email value",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const schema = {",
+                  "  \"type\": \"object\",",
+                  "  \"properties\": {",
+                  "    \"status\": { \"type\": \"string\" },",
+                  "    \"data\": {",
+                  "      \"type\": \"object\",",
+                  "      \"properties\": {",
+                  "        \"userId\": { \"type\": \"integer\" },",
+                  "        \"photoFilename\": { \"type\": \"string\" },",
+                  "        \"distanceUnits\": { \"type\": \"string\" },",
+                  "        \"currency\": { \"type\": \"string\" }",
+                  "      },",
+                  "      \"required\": [\"userId\", \"photoFilename\", \"distanceUnits\", \"currency\"]",
+                  "    }",
+                  "  },",
+                  "  \"required\": [\"status\", \"data\"]",
+                  "};",
+                  "",
+                  "// Schema validation test",
+                  "pm.test(\"Response JSON Schema\", function () {",
+                  "    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+                  "});",
+                  "",
+                  "// Check email value",
+                  "pm.test(\"The email in the response has a valid format\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if(jsonData.data.email) {",
+                  "        pm.expect(jsonData.data.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "    }",
+                  "});",
+                  "",
+                  "// 4. Save userId",
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.environment.set(\"userId\", jsonData.data.userId);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"serhii.test777@gmail.com\",\n  \"password\": \"{{testPassword}}\",\n  \"repeatPassword\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Car expense",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 200: Витрату створено\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Пробіг відповідає  значенню\", function () {",
+                  "    const requestMileage = pm.environment.get(\"currentMileage\");",
+                  "    const responseData = pm.response.json().data;",
+                  "    ",
+                  "    pm.expect(responseData.mileage).to.eql(Number(requestMileage));",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "let lastMileage = Number(pm.environment.get(\"lastMileage\")) || 100;",
+                  "",
+                  "// 2. Додаємо до нього довільне число",
+                  "let newMileage = lastMileage + 50;",
+                  "",
+                  "// 3. Зберігаємо нове значення назад у середовище під назвою 'currentMileage'",
+                  "pm.environment.set(\"currentMileage\", newMileage);",
+                  "",
+                  "// 4. Оновлюємо 'lastMileage'",
+                  "pm.environment.set(\"lastMileage\", newMileage);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carId\": {{carId}},\n  \"reportedAt\": \"2026-02-27\",\n  \"mileage\": {{currentMileage}},\n  \"liters\": 15,\n  \"totalCost\": 600,\n  \"forceMileage\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/expenses",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "expenses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Car Creates",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Перевірка, що авто успішно створено",
+                  "pm.test(\"Статус код 201: Машину успішно створено\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "// Збереження ID машини у змінну середовища",
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    ",
+                  "    // Беремо id з об'єкта data",
+                  "    const createdCarId = jsonData.data.id;",
+                  "    ",
+                  "    // Записуємо його в змінну carId",
+                  "    pm.environment.set(\"carId\", createdCarId);",
+                  "    ",
+                  "    console.log(\"Збережено carId: \" + createdCarId);",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 122\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/cars",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "cars"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Field validation query group",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"The server returns a status of 400 (Bad Request)\", function () {",
+                  "    pm.response.to.have.status(400); ",
+                  "});",
+                  "",
+                  "pm.test(\"Checking the exact error text in message\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(jsonData.message).to.eql(\"Name has to be from 2 to 20 characters long\"); ",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"S\",\n  \"lastName\": \"QA\",\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\",\n  \"repeatPassword\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editing a user profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус код 200 (Оновлення успішне)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Відповідь повністю відповідає надісланим даним\", function () {",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);",
+                  "    // Беремо  сервера (об'єкт data)",
+                  "    const responseData = pm.response.json().data;",
+                  "",
+                  "    // Порівнюємо стандартні поля",
+                  "    pm.expect(responseData.name).to.eql(requestBody.name);",
+                  "    pm.expect(responseData.lastName).to.eql(requestBody.lastName);",
+                  "    pm.expect(responseData.country).to.eql(requestBody.country);",
+                  "    ",
+                  "    // 4. Порівнюємо фото",
+                  "    pm.expect(responseData.photoFilename).to.eql(requestBody.photo);",
+                  "    ",
+                  "    // Перевірка дати народження",
+                  "    pm.expect(responseData.dateBirth).to.eql(requestBody.dateBirth);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"photo\": \"default-user.png\",\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"dateBirth\": \"1990-06-23T00:00:00.000Z\",\n  \"country\": \"Ukraine\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус код 200 (Пароль успішно змінено)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"userId збігається з ID реєстрації\", function () {",
+                  "        const jsonData = pm.response.json();",
+                  "        ",
+                  "        // Отримуємо ID ",
+                  "        const savedUserId = pm.environment.get(\"userId\");",
+                  "        ",
+                  "        // Порівнюємо значення",
+                  "        pm.expect(jsonData.data.userId).to.eql(savedUserId);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"Qwerty12345\",\n  \"password\": \"Password123!\",\n  \"repeatPassword\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/password",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
