@@ -10,7 +10,7 @@ The repository is organized by modules/homework assignments. Each folder contain
   * **Focus:** Basic API flow automation, environment setup, dynamic variables, and negative testing.
   * **Key Scenarios:** Dynamic user registration, authentication (Login/Logout), password validation rules, and basic entity creation (Cars & Expenses).
 
-* 📁 **[HW-14.1-API-Testing](./HW-14.1-API-Testing)**
+* 📁 **[HW-14.1-API-Testing](./HW-14.1)**
   * **Focus:** Advanced API testing, strict data type validation, complex assertions, and multi-step workflows.
   * **Key Scenarios:** Boundary value analysis, full user/garage lifecycle management, and dynamic data parsing from server responses.
 
