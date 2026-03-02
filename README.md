@@ -29,4 +29,4 @@ The repository is organized by modules/homework assignments. Each folder contain
 ## ⚙️ How to Run Locally
 1. Clone this repository to your local machine: 
    ```bash
-   git clone [https://github.com/krizhanski/Postman.git](https://github.com/krizhanski/Postman.git)
+   git clone https://github.com/krizhanski/Postman.git
