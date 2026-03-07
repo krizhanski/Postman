@@ -1,0 +1,304 @@
+{
+  "info": {
+    "_postman_id": "efa78c7f-d4de-43ba-9eb5-a851cab89b94",
+    "name": "HM15.1_QA_auto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50434350",
+    "_collection_link": "https://go.postman.co/collection/50434350-efa78c7f-d4de-43ba-9eb5-a851cab89b94?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auto",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Get an array of test cases from the collection variables",
+                  "let testCases = pm.collectionVariables.get(\"signupCases\");",
+                  "// If the array is empty (first run), create a set of test data",
+                  "if (!testCases) {",
+                  "    // Generate a unique email",
+                  "    let uniqueEmail = \"serhii\" + Date.now() + \"@gmail.com\";",
+                  "    ",
+                  "    testCases = [",
+                  "        { name: \"\", lastName: \"Kryzhanskyi\", email: uniqueEmail, expectedStatus: 400, testName: \"Empty name\" },",
+                  "        { name: \"S\", lastName: \"Kryzhanskyi\", email: uniqueEmail, expectedStatus: 400, testName: \"One character in the name\" },",
+                  "        { name: \"Serhii\", lastName: \"Kryzhanskyi\", email: uniqueEmail, expectedStatus: 201, testName: \"Valid data\" }",
+                  "    ];",
+                  "} else {",
+                  "    testCases = JSON.parse(testCases);",
+                  "}",
+                  "// Retrieve the first object (test case) from the array for the current test",
+                  "let currentCase = testCases.shift();",
+                  "// Store the rest of the array back in the variable, converting it to text",
+                  "pm.collectionVariables.set(\"signupCases\", JSON.stringify(testCases));",
+                  "",
+                  "// Setting variables for the current case",
+                  "pm.variables.set(\"req_name\", currentCase.name);",
+                  "pm.variables.set(\"req_lastName\", currentCase.lastName);",
+                  "pm.variables.set(\"req_email\", currentCase.email);",
+                  "",
+                  "// Force password entry before each request",
+                  "pm.variables.set(\"userPassword\", \"Qwerty12345!\"); ",
+                  "",
+                  "pm.variables.set(\"expectedStatus\", currentCase.expectedStatus);",
+                  "pm.variables.set(\"testName\", currentCase.testName);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let expectedStatus = pm.variables.get(\"expectedStatus\");",
+                  "let testName = pm.variables.get(\"testName\");",
+                  "",
+                  "// Universal status check",
+                  "pm.test(\"Create User: \" + testName + \" - Status pending \" + expectedStatus, function () {",
+                  "    pm.response.to.have.status(expectedStatus);",
+                  "});",
+                  "",
+                  "let remainingCases = JSON.parse(pm.collectionVariables.get(\"signupCases\"));",
+                  "",
+                  "// Looping or moving on logic",
+                  "if (remainingCases.length > 0) {",
+                  "    // If there is still data in the array, run the same query again",
+                  "    postman.setNextRequest(\"Create User\"); ",
+                  "} else {",
+                  "    // If the array is empty, clear the variable",
+                  "    pm.collectionVariables.unset(\"signupCases\");",
+                  "    ",
+                  "   ",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{req_name}}\",\n    \"lastName\": \"{{req_lastName}}\",\n    \"email\": \"{{req_email}}\",\n    \"password\": \"{{userPassword}}\",\n    \"repeatPassword\": \"{{userPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "let profileCases = pm.collectionVariables.get(\"profileCases\");",
+                  "",
+                  "if (!profileCases) {",
+                  "    profileCases = [",
+                  "        { name: \"\", lastName: \"Kryzhanskyi\", expectedStatus: 200, testName: \"Empty name\" },",
+                  "        { name: \"Serhii\", lastName: \"\", expectedStatus: 200, testName: \"Empty last name\" },",
+                  "        { name: \"Serhii\", lastName: \"Kryzhanskyi\", expectedStatus: 200, testName: \"Valid profile\" }",
+                  "    ];",
+                  "} else {",
+                  "    profileCases = JSON.parse(profileCases);",
+                  "}",
+                  "",
+                  "let currentCase = profileCases.shift();",
+                  "pm.collectionVariables.set(\"profileCases\", JSON.stringify(profileCases));",
+                  "",
+                  "pm.variables.set(\"profile_name\", currentCase.name);",
+                  "pm.variables.set(\"profile_lastName\", currentCase.lastName);",
+                  "pm.variables.set(\"expectedStatus\", currentCase.expectedStatus);",
+                  "pm.variables.set(\"testName\", currentCase.testName);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let expectedStatus = pm.variables.get(\"expectedStatus\");",
+                  "let testName = pm.variables.get(\"testName\");",
+                  "// Dynamic test creation and validation",
+                  "pm.test(\"Update Profile: \" + testName + \" - Status pending \" + expectedStatus, function () {",
+                  "    pm.response.to.have.status(expectedStatus);",
+                  "});",
+                  "",
+                  "let remainingCases = JSON.parse(pm.collectionVariables.get(\"profileCases\"));",
+                  "",
+                  "if (remainingCases.length > 0) {",
+                  "    // Repeat the query for the next data set",
+                  "    postman.setNextRequest(\"Update Profile\");",
+                  "} else {",
+                  "    // Completing the cycle",
+                  "    pm.collectionVariables.unset(\"profileCases\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{name}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"dateBirth\": \"1990-06-23\",\n    \"country\": \"Ukraine\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "// automatic URL switching depending on iteration in Runner",
+          "if (pm.info.iteration === 0) {",
+          "    pm.collectionVariables.set(\"url\", \"https://qauto2.forstudy.space/api\"); // Substitutes for the real URL of the first environment",
+          "} else if (pm.info.iteration === 1) {",
+          "    pm.collectionVariables.set(\"url\", \"https://qauto.forstudy.space/api\"); // Substitutes for the real URL of the second environment",
+          "}",
+          "",
+          "// We set the password so that it is the same for all tests",
+          "if (!pm.collectionVariables.has(\"userPassword\")) {",
+          "    pm.collectionVariables.set(\"userPassword\", \"MySuperPassword123!\");",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": ""
+    },
+    {
+      "key": "userPassword",
+      "value": ""
+    },
+    {
+      "key": "expectedMessage",
+      "value": ""
+    },
+    {
+      "key": "testName",
+      "value": ""
+    },
+    {
+      "key": "target",
+      "value": ""
+    },
+    {
+      "key": "name",
+      "value": ""
+    },
+    {
+      "key": "lastName",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
