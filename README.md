@@ -18,6 +18,10 @@ The repository is organized by modules/homework assignments. Each folder contain
 **Focus:** Advanced collection orchestration, dynamic request looping (DRY principle), and multi-iteration environment switching.  
 **Key Scenarios:** Automated field validation using `postman.setNextRequest`, dynamic data injection via JSON arrays, and seamless execution across multiple test environments (**qauto** & **qauto2**).
 
+### 📁 [HW-16.1-GraphQL-API-Testing](./HW-16.1)
+**Focus:** GraphQL API interaction, query optimization (aliases and fragments), advanced Postman scripting (array manipulation, math functions), and JSON Schema validation.  
+**Key Scenarios:** Extracting dynamic values (min/max/average) from queries, passing array variables between requests, batching queries with aliases to prevent overfetching, and automating end-to-end data flow in Collection Runner.
+
 ---
 
 ## 🛠️ Tools & Technologies Used
@@ -25,6 +29,7 @@ The repository is organized by modules/homework assignments. Each folder contain
 * **Postman:** Structuring requests, building collections, and managing environments (Dev/Prod).
 * **JavaScript (Chai Assertion Library):** Writing *Pre-request Scripts* and Post-response *Tests* for validations.
 * **REST API:** Mastering HTTP methods (GET, POST, PUT, DELETE), headers, and status code analysis.
+* GraphQL API: Querying and mutating data, utilizing advanced features like Aliases and Fragments to optimize network requests and prevent overfetching.
 * **Git / GitHub:** Version control, branching strategies, and portfolio documentation.
 
 ## 💡 Key QA Skills Demonstrated
@@ -33,6 +38,9 @@ The repository is organized by modules/homework assignments. Each folder contain
 * **Request Chaining:** Extracting specific data (e.g., `userId` or `carId`) from a response payload and securely passing it to subsequent requests via environment variables.
 * **Negative & Boundary Testing:** Designing targeted error-handling tests (400 Bad Request, 401 Unauthorized) to ensure robust system behavior and proper validation messages.
 * **End-to-End Automation:** Structuring tests so they can be seamlessly executed via the Postman *Collection Runner* with zero manual intervention.
+* **Advanced Array Manipulation: Using JavaScript to parse complex JSON responses, extract specific arrays, and perform mathematical operations (like calculating minimum, maximum, and average values) to drive subsequent test logic.
+* **GraphQL Query Optimization: Validating batch data retrieval in a single request using Aliases, ensuring the API handles complex, multi-layered queries correctly.
+* **API Contract Testing: Writing strict assertions to verify that the server response exactly matches the expected JSON Schema (e.g., verifying id is a string and square is a number), preventing silent data corruption.
 
 ## ⚙️ How to Run Locally
 
