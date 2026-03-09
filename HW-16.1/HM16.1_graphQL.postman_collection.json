@@ -1,0 +1,380 @@
+{
+  "info": {
+    "_postman_id": "4a824b0c-aa2d-4d19-aea5-de8239d77b96",
+    "name": "HM16.1_graphQL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50434350",
+    "_collection_link": "https://go.postman.co/collection/50434350-4a824b0c-aa2d-4d19-aea5-de8239d77b96?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Cities",
+      "item": [
+        {
+          "name": "GetAllCities",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "// Helper function to generate a random integer between min and max",
+                  "function getRandomNumber(min, max) {",
+                  "    return Math.floor(Math.random() * (max - min + 1)) + min;",
+                  "}",
+                  "// Initialize an empty array to store the selected city IDs",
+                  "let arrayWithId = [];",
+                  "// Function to select a specific number of random city IDs from the provided array",
+                  "function getRandomIds(array, count) {",
+                  "    for (let i = 0; i < count; i++) {",
+                  "        arrayWithId.push(array[getRandomNumber(0, array.length - 1)].id);",
+                  "    }",
+                  "}",
+                  "// Execute the function to get 4 random IDs and save them to collection variables",
+                  "getRandomIds(jsonData.data.getAllCities, 4);",
+                  "pm.collectionVariables.set(\"arrayWithId\", arrayWithId);",
+                  "// Function to calculate the average 'square' (area) value of all cities in the array",
+                  "function getAverageValue(arr) {",
+                  "    let max = 0; ",
+                  "    for (let i = 0; i < arr.length; i++) {",
+                  "        max = max + arr[i].square;",
+                  "    }",
+                  "    return max / arr.length;",
+                  "}",
+                  "// Calculate the average square and save it to a collection variable for later use",
+                  "pm.collectionVariables.set(\"squareAvg\", getAverageValue(jsonData.data.getAllCities));",
+                  "// Postman test to ensure the response contains at least one city ",
+                  "pm.test(\"Check lenght of array\", function () {",
+                  "    pm.expect(jsonData.data.getAllCities.length).to.be.greaterThan(0);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getAllCities {\n    id\n    name\n    square\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{url}}",
+              "host": [
+                "{{url}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetCitiesByIds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body as a JSON object to access its data",
+                  "let jsonData = pm.response.json();",
+                  "",
+                  "// Postman test to verify that the returned array contains exactly 4 cities",
+                  "pm.test(\"Check lenght of array\", function () {",
+                  "    // Assert that the length of the getCitiesByIds array is equal to 4",
+                  "    pm.expect(jsonData.data.getCitiesByIds.length).to.eql(4);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetCitiesByIds($ids: [ID!]!) {\n  getCitiesByIds(in: $ids) {\n    id\n    name\n    square\n  }\n}",
+                "variables": "{\n  \"ids\": [{{arrayWithId}}]\n}"
+              }
+            },
+            "url": {
+              "raw": "{{url}}",
+              "host": [
+                "{{url}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetCityDescriptions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response data",
+                  "let jsonData = pm.response.json();",
+                  "",
+                  "// Test to verify the number of returned objects (aliases)",
+                  "pm.test(\"Check length of object\", function () {",
+                  "    // Count the number of keys in the 'data' object (should be 4)",
+                  "    pm.expect(Object.keys(jsonData.data).length).to.eql(4);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Retrieve the first ID from the saved array and store it as a separate collection variable",
+                  "let id0 = pm.collectionVariables.get(\"arrayWithId\")[0];",
+                  "pm.collectionVariables.set(\"id0\", id0);",
+                  "let id1 = pm.collectionVariables.get(\"arrayWithId\")[1];",
+                  "pm.collectionVariables.set(\"id1\", id1);",
+                  "let id2 = pm.collectionVariables.get(\"arrayWithId\")[2];",
+                  "pm.collectionVariables.set(\"id2\", id2);",
+                  "let id3 = pm.collectionVariables.get(\"arrayWithId\")[3];",
+                  "pm.collectionVariables.set(\"id3\", id3);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetCities($id0: ID!, $id1: ID!, $id2: ID!, $id3: ID!) {\n  city1: getCityById(id: $id0) {\n    ...CityDetails\n  }\n  city2: getCityById(id: $id1) {\n    ...CityDetails\n  }\n  city3: getCityById(id: $id2) {\n    ...CityDetails\n  }\n  city4: getCityById(id: $id3) {\n    ...CityDetails\n  }\n}\n\nfragment CityDetails on CityAbstract {\n  id\n  cityName: name  \n  square\n}",
+                "variables": "{\n  \"id0\": \"{{id0}}\",\n  \"id1\": \"{{id1}}\",\n  \"id2\": \"{{id2}}\",\n  \"id3\": \"{{id3}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{url}}",
+              "host": [
+                "{{url}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetCitiesByRangeId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body as a JSON object",
+                  "let jsonData = pm.response.json();",
+                  "",
+                  "// Calculate the expected count of cities within the inclusive range (max - min + 1)",
+                  "let cityRange = pm.collectionVariables.get(\"maxId\") - pm.collectionVariables.get(\"minId\") + 1;",
+                  "",
+                  "// Postman test to verify that the returned array matches the calculated range size",
+                  "pm.test(\"Check city range\", function () {",
+                  "    // Assert that the length of the returned array equals the expected range count",
+                  "    pm.expect(jsonData.data.getCityByRangeId.length).to.eql(cityRange);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Option 1: Calculate the range boundaries",
+                  "let arrayWithId = pm.collectionVariables.get(\"arrayWithId\");",
+                  "",
+                  "// Use the spread operator (...) with Math.min to find the smallest ID in the array",
+                  "let minId = Math.min(...arrayWithId);",
+                  "// Save the minimum ID to a collection variable for use in the GraphQL variables",
+                  "pm.collectionVariables.set(\"minId\", minId);",
+                  "",
+                  "// Use the spread operator with Math.max to find the largest ID in the array",
+                  "let maxId = Math.max(...arrayWithId);",
+                  "// Save the maximum ID to a collection variable",
+                  "pm.collectionVariables.set(\"maxId\", maxId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($minId: Int! = 1, $maxId: Int! = 22) {\n  getCityByRangeId(filter: {minId: $minId, maxId: $maxId}) {\n    id\n    name\n    square\n  }\n}",
+                "variables": "{\n  \"minId\": {{minId}},\n  \"maxId\": {{maxId}}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{url}}",
+              "host": [
+                "{{url}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddCity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Postman test to validate that the response matches the expected JSON schema",
+                  "pm.test('Response has the correct schema', function () {",
+                  "    // Assert that the response body follows the defined structural rules",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        properties: {",
+                  "            data: {",
+                  "                type: 'object',",
+                  "                properties: {",
+                  "                    addCity: {",
+                  "                        type: 'object',",
+                  "                        properties: {",
+                  "                            // Validating field types: ID and Name must be strings, Square must be a number",
+                  "                            id: { type: 'string' },",
+                  "                            name: { type: 'string' },",
+                  "                            square: { type: 'number' },",
+                  "                            description: { type: 'string' }",
+                  "                        },",
+                  "                        // Ensure all mandatory fields are present in the response",
+                  "                        required: ['id', 'name', 'square', 'description']",
+                  "                    }",
+                  "                },",
+                  "                required: ['addCity']",
+                  "            }",
+                  "        },",
+                  "        required: ['data']",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation AddCity($name: String!, $square: Float!, $description: String!) {\n  addCity(name: $name, square: $square, description: $description) {\n    id\n    name\n    square\n    ... on City {\n      description\n    }\n  }\n}",
+                "variables": "{\n  \"name\": \"{{$randomFirstName}}\",\n  \"square\": {{squareAvg}},\n  \"description\": \"Best\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{url}}",
+              "host": [
+                "{{url}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": ""
+    },
+    {
+      "key": "arrayWithId",
+      "value": ""
+    },
+    {
+      "key": "squareAvg",
+      "value": ""
+    },
+    {
+      "key": "id0",
+      "value": ""
+    },
+    {
+      "key": "id1",
+      "value": ""
+    },
+    {
+      "key": "id2",
+      "value": ""
+    },
+    {
+      "key": "id3",
+      "value": ""
+    },
+    {
+      "key": "minId",
+      "value": ""
+    },
+    {
+      "key": "maxId",
+      "value": ""
+    }
+  ]
+}
