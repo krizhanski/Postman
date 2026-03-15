@@ -22,6 +22,9 @@ The repository is organized by modules/homework assignments. Each folder contain
 **Focus:** GraphQL API interaction, query optimization (aliases and fragments), advanced Postman scripting (array manipulation, math functions), and JSON Schema validation.  
 **Key Scenarios:** Extracting dynamic values (min/max/average) from queries, passing array variables between requests, batching queries with aliases to prevent overfetching, and automating end-to-end data flow in Collection Runner.
 
+### 📁 [HW-18.1-SOAP-API-Testing](./HW-18.1)
+**Focus:** SOAP API interaction, XML payload structuring, XML-to-JSON conversion (`xml2Json`), and deep response parsing.  
+**Key Scenarios:** Constructing valid `soap:Envelope` and `soap:Body` requests, validating complex ISBN-10 and ISBN-13 checksum logic, extracting deeply nested XML nodes using JavaScript, asserting XML namespace correctness, and verifying HTTP headers alongside the response body.
 ---
 
 ## 🛠️ Tools & Technologies Used
@@ -31,6 +34,8 @@ The repository is organized by modules/homework assignments. Each folder contain
 * **REST API:** Mastering HTTP methods (GET, POST, PUT, DELETE), headers, and status code analysis.
 * GraphQL API: Querying and mutating data, utilizing advanced features like Aliases and Fragments to optimize network requests and prevent overfetching.
 * **Git / GitHub:** Version control, branching strategies, and portfolio documentation.
+* **SOAP API:** Structuring XML payloads (Envelopes and Bodies), interacting with web service endpoints, and asserting XML responses.
+* **XML / JSON Parsing:** Utilizing Postman's built-in `xml2Json()` method to convert complex XML responses into easily navigable JavaScript objects for testing.
 
 ## 💡 Key QA Skills Demonstrated
 
@@ -41,6 +46,9 @@ The repository is organized by modules/homework assignments. Each folder contain
 * **Advanced Array Manipulation: Using JavaScript to parse complex JSON responses, extract specific arrays, and perform mathematical operations (like calculating minimum, maximum, and average values) to drive subsequent test logic.
 * **GraphQL Query Optimization: Validating batch data retrieval in a single request using Aliases, ensuring the API handles complex, multi-layered queries correctly.
 * **API Contract Testing: Writing strict assertions to verify that the server response exactly matches the expected JSON Schema (e.g., verifying id is a string and square is a number), preventing silent data corruption.
+* **SOAP & XML Validation:** Crafting valid SOAP requests, parsing nested XML responses, and writing strict assertions for specific nodes and namespaces (e.g., verifying `xmlns` attributes).
+* **Comprehensive Test Coverage:** Designing 10+ granular tests per endpoint, ensuring both HTTP-level attributes (headers, status code, response time) and deep payload data (body content, boolean results) are thoroughly verified.
+
 
 ## ⚙️ How to Run Locally
 
