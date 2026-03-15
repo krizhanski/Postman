@@ -23,8 +23,7 @@ The repository is organized by modules/homework assignments. Each folder contain
 **Key Scenarios:** Extracting dynamic values (min/max/average) from queries, passing array variables between requests, batching queries with aliases to prevent overfetching, and automating end-to-end data flow in Collection Runner.
 
 ### 📁 [HW-18.1-SOAP-API-Testing](./HW-18.1)
-**Focus:** SOAP API interaction, XML payload structuring, XML-to-JSON conversion (`xml2Json`), and deep response parsing.  
-**Key Scenarios:** Constructing valid `soap:Envelope` and `soap:Body` requests, validating complex ISBN-10 and ISBN-13 checksum logic, extracting deeply nested XML nodes using JavaScript, asserting XML namespace correctness, and verifying HTTP headers alongside the response body.
+**Focus:** SOAP API interaction, XML payload structuring, XML-to-JSON conversion (`xml2Json`), and deep response parsing. **Key Scenarios:** Constructing valid `soap:Envelope` and `soap:Body` requests, validating complex ISBN-10 and ISBN-13 checksum logic, extracting deeply nested XML nodes using JavaScript, asserting XML namespace correctness, and verifying HTTP headers alongside the response body.
 ---
 
 ## 🛠️ Tools & Technologies Used
