@@ -1,0 +1,82 @@
+{
+	"id": "adaa0ed3-d05a-4869-8273-ab57374ccc26",
+	"name": "QAuto Dev",
+	"values": [
+		{
+			"key": "url",
+			"value": "https://qauto2.forstudy.space/api",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "req_email",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userPassword",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "carId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "req_name",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "req_lastName",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userEmail",
+			"value": "serhii.qa1774014463943@test.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "oldPassword",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "currentPassword",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "expenseDate",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-03-20T15:46:44.263Z",
+	"_postman_exported_using": "Postman/12.2.4"
+}

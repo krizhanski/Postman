@@ -1,0 +1,70 @@
+{
+	"id": "a0e72be2-624f-437a-b306-f601a653f9e6",
+	"name": "QAuto Prod",
+	"values": [
+		{
+			"key": "url",
+			"value": "https://qauto.forstudy.space/api",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "req_email",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userPassword",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "currentPassword",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "carId",
+			"value": "229888",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "req_name",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "req_lastName",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "oldPassword",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-03-20T15:46:55.765Z",
+	"_postman_exported_using": "Postman/12.2.4"
+}

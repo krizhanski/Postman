@@ -1,0 +1,740 @@
+{
+  "info": {
+    "_postman_id": "1c442f77-9da6-4d97-a400-d181448b9b41",
+    "name": "HM13.1_QA_auto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50434350",
+    "_collection_link": "https://go.postman.co/collection/50434350-1c442f77-9da6-4d97-a400-d181448b9b41?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "QA_Auto",
+      "item": [
+        {
+          "name": "Creating a unique user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let requestBody = JSON.parse(pm.request.body.raw);",
+                  "pm.environment.set(\"currentPassword\", requestBody.password);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Унікальний ID для імейлу",
+                  "let uniqueId = Date.now();",
+                  "pm.environment.set(\"userEmail\", \"serhii.qa\" + uniqueId + \"@test.com\");",
+                  "",
+                  "// Генеруємо випадкове 5-значне число для пароля",
+                  "let randomNum = Math.floor(Math.random() * 90000) + 10000;",
+                  "",
+                  "// Формуємо пароль ",
+                  "pm.environment.set(\"userPassword\", \"Pass\" + randomNum);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"Test\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\",\n  \"repeatPassword\": \"{{userPassword}}\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change user profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 200: Профіль успішно оновлено\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"photo\": \"default-user.png\",\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"dateBirth\": \"1990-06-23T00:00:00.000Z\",\n  \"country\": \"Ukraine\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// 1. Беремо поточний пароль зі змінної оточення (яка вже була встановлена на етапі реєстрації)",
+                  "let currentPassword = pm.environment.get(\"currentPassword\");",
+                  "",
+                  "// Запобіжник: якщо змінної немає, виводимо помилку в консоль",
+                  "if (!currentPassword) {",
+                  "    console.error(\"Помилка: Змінна currentPassword порожня! Переконайся, що попередній запит (Signup) зберіг її.\");",
+                  "}",
+                  "",
+                  "// 2. Генеруємо новий пароль для цього конкретного прогону в Runner",
+                  "let randomNum = Math.floor(Math.random() * 10000);",
+                  "let newPassword = \"NewPass\" + randomNum + \"!\";",
+                  "",
+                  "// 3. Зберігаємо новий пароль у змінну, щоб Postman міг підставити його в тіло запиту:",
+                  "// { \"oldPassword\": \"{{currentPassword}}\", \"password\": \"{{newPassword}}\", \"repeatPassword\": \"{{newPassword}}\" }",
+                  "pm.environment.set(\"newPassword\", newPassword);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 - Password changed\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Якщо сервер прийняв новий пароль",
+                  "if (pm.response.code === 200) {",
+                  "    let justSetPassword = pm.environment.get(\"newPassword\");",
+                  "    ",
+                  "    // ОНОВЛЮЄМО змінну currentPassword. ",
+                  "    // Тепер для всіх наступних запитів у Runner цей новий пароль вважатиметься \"поточним\"",
+                  "    pm.environment.set(\"currentPassword\", justSetPassword);",
+                  "    ",
+                  "    // Прибираємо за собою тимчасову змінну",
+                  "    pm.environment.unset(\"newPassword\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"{{currentPassword}}\",\n  \"password\": \"{{newPassword}}\",\n  \"repeatPassword\": \"{{newPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/password",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 200: Успішний вихід\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 200: Успішний вхід з новим паролем\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\", \n  \"password\": \"{{currentPassword}}\" \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signin",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create new car",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 201: Авто створено\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "// Витягуємо ID та зберігаємо",
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.environment.set(\"carId\", jsonData.data.id);",
+                  "    console.log(\"Збережено carId: \" + jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/cars",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "cars"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Car Expenses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 200: Витрату додано\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const moment = require('moment');",
+                  "",
+                  "// Генеруємо дату у форматі YYYY-MM-DD",
+                  "let currentDate = moment().format(\"YYYY-MM-DD\"); ",
+                  "",
+                  "// Зберігаємо у змінну оточення",
+                  "pm.environment.set(\"expenseDate\", currentDate);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carId\": {{carId}},\n \"reportedAt\": \"{{expenseDate}}\",\n  \"mileage\": 150,\n  \"liters\": 20,\n  \"totalCost\": 1000,\n  \"forceMileage\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/expenses",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "expenses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deleting a created user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 200: Користувача успішно видалено\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "field validation check Password",
+      "item": [
+        {
+          "name": "Short Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 400 при короткому паролі\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\", \n\"lastName\": \"QA\",\n  \"email\": \"valid@email.com\",\n  \"password\": \"123\", \n\"repeatPassword\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "No Digits",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. статус 400 Bad Request",
+                  "pm.test(\"Статус код 400 (Помилка валідації)\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "// 2. Перевіряємо, що повідомлення про помилку є текстом ",
+                  "pm.test(\"Повідомлення про помилку є рядком (string)\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "    pm.expect(jsonData.message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"test-nodigits@test.com\",\n  \"password\": \"PasswordOnlyLetters\",\n  \"repeatPassword\": \"PasswordOnlyLetters\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "No Capital Letters",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. статус 400 Bad Request",
+                  "pm.test(\"Статус код 400 (Помилка валідації)\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "// 2. Перевіряємо, що повідомлення про помилку є текстом ",
+                  "pm.test(\"Повідомлення про помилку є рядком (string)\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "    pm.expect(jsonData.message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"test-nocapitals@test.com\",\n  \"password\": \"onlysmallletters123\",\n  \"repeatPassword\": \"onlysmallletters123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Long password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. статус 400 Bad Request",
+                  "pm.test(\"Статус код 400 (Помилка валідації)\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "// 2. Перевіряємо, що повідомлення про помилку є текстом ",
+                  "pm.test(\"Повідомлення про помилку є рядком (string)\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "    pm.expect(jsonData.message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"test-toolong@test.com\",\n  \"password\": \"VeryLongPassword123456789\",\n  \"repeatPassword\": \"VeryLongPassword123456789\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Passwords Don't Match",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. статус 400 Bad Request",
+                  "pm.test(\"Статус код 400 (Помилка валідації)\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "// 2. Перевіряємо, що повідомлення про помилку є текстом ",
+                  "pm.test(\"Повідомлення про помилку є рядком (string)\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "    pm.expect(jsonData.message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"test-mismatch@test.com\",\n  \"password\": \"ValidPassword123\",\n  \"repeatPassword\": \"DifferentPassword321\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Empty Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. статус 400 Bad Request",
+                  "pm.test(\"Статус код 400 (Помилка валідації)\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "// 2. Перевіряємо, що повідомлення про помилку є текстом ",
+                  "pm.test(\"Повідомлення про помилку є рядком (string)\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "    pm.expect(jsonData.message).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Serhii\",\n  \"lastName\": \"QA\",\n  \"email\": \"test-empty@test.com\",\n  \"password\": \"\",\n  \"repeatPassword\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/signup",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
