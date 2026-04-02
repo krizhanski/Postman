@@ -1,0 +1,50 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 200,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 3.959999999999999,
+    "medianResTime" : 2.0,
+    "minResTime" : 0.0,
+    "maxResTime" : 38.0,
+    "pct1ResTime" : 8.0,
+    "pct2ResTime" : 16.799999999999955,
+    "pct3ResTime" : 34.0,
+    "throughput" : 212.7659574468085,
+    "receivedKBytesPerSec" : 58.70387300531915,
+    "sentKBytesPerSec" : 41.97764295212766
+  },
+  "POST/Create a hero" : {
+    "transaction" : "POST/Create a hero",
+    "sampleCount" : 100,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 5.7799999999999985,
+    "medianResTime" : 3.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 38.0,
+    "pct1ResTime" : 16.600000000000023,
+    "pct2ResTime" : 34.0,
+    "pct3ResTime" : 37.95999999999998,
+    "throughput" : 106.60980810234541,
+    "receivedKBytesPerSec" : 28.324476945628998,
+    "sentKBytesPerSec" : 22.48800639658849
+  },
+  "DELETE/Delete the created hero" : {
+    "transaction" : "DELETE/Delete the created hero",
+    "sampleCount" : 100,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 2.14,
+    "medianResTime" : 1.0,
+    "minResTime" : 0.0,
+    "maxResTime" : 9.0,
+    "pct1ResTime" : 6.900000000000006,
+    "pct2ResTime" : 8.0,
+    "pct3ResTime" : 9.0,
+    "throughput" : 114.28571428571428,
+    "receivedKBytesPerSec" : 32.700892857142854,
+    "sentKBytesPerSec" : 20.988839285714285
+  }
+}
