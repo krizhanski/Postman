@@ -36,12 +36,12 @@ To simulate a realistic user journey, I needed to create a character and immedia
 1. **Variables & Headers:** Configured `${url}` as `localhost` and added an HTTP Header Manager for `Content-Type: application/json`.
 2. **POST Request (Create Hero):** Created a payload using JMeter functions `${__RandomString}` and `${__Random}` to generate unique users.
    
-   ![POST Request Setup](./POST/Create%20a%20hero.png)
+   ![POST Request Setup](./POST/Create_a_hero.png)
 
 3. **JSON Extractor:** Attached a Post-Processor to the POST request. It used the JSON Path `$.id` to capture the newly generated ID from the server's response and stored it in a variable named `created_id`.
 4. **DELETE Request (Delete Hero):** Configured the path as `/character/${created_id}`. This ensured the exact character created in step 2 was instantly deleted, preventing database bloat during the load test.
 
-   ![DELETE Request Setup](./DELETE/Delete%20the%20created%20hero.png)
+   ![DELETE Request Setup](./DELETE/Delete_the_created_hero.png)
 
 ---
 
