@@ -62,7 +62,17 @@ db.CarBrands.insertMany([
 *Note: I executed `db.CarBrands.find()` to extract the dynamically generated `ObjectId`s for the next step.*
 
 **2. Creating Models (One-to-Many Relationship):**
-I linked specific models to their parent brands using the extracted `carBrandId`.
+To link models to their parent brands, I extracted the dynamically generated `ObjectId`s from the `CarBrands` collection and used them as pointers in the `carBrandId` field.
+
+```javascript
+db.CarsModels.insertMany([
+  { title: "TT", carBrandId: ObjectId("69d230ca94800c8ff0cbb327") }, // Audi
+  { title: "X5", carBrandId: ObjectId("69d231a394800c8ff0cbb329") }, // BMW
+  { title: "Focus", carBrandId: ObjectId("69d231a394800c8ff0cbb32a") }, // Ford
+  { title: "911", carBrandId: ObjectId("69d231a394800c8ff0cbb32b") }, // Porsche
+  { title: "500", carBrandId: ObjectId("69d231a394800c8ff0cbb32c") }  // Fiat
+]);
+```
 
 ### 🐛 Troubleshooting: Data Duplication (QA Mindset)
 During the creation of the `CarsModels` collection, I accidentally executed the insert command multiple times, resulting in duplicate models (e.g., multiple "X5" entries pointing to BMW). 
@@ -78,7 +88,7 @@ During the creation of the `CarsModels` collection, I accidentally executed the 
 
 ## 🟢 Stage 4: Digital Identities (Users & Profiles)
 
-Next, I populated the user data. 
+Next, I populated the user data and established a **1:1 relationship** between a User and their Settings Profile.
 
 **1. Creating Users:**
 ```javascript
@@ -92,14 +102,12 @@ db.Users.insertMany([
 ```
 
 **2. Creating Profiles (1:1 Relationship):**
-I extracted the new User IDs and created dedicated settings profiles for each user.
+I linked each profile to a specific user by storing the user's `_id` in the `userId` field.
 ```javascript
 db.UserProfile.insertMany([
   { userId: ObjectId('69d2343d94800c8ff0cbb33a'), distanceUnits: "miles", currency: "usd" },
   { userId: ObjectId('69d2343d94800c8ff0cbb33b'), distanceUnits: "miles", currency: "usd" },
-  { userId: ObjectId('69d2343d94800c8ff0cbb33c'), distanceUnits: "miles", currency: "usd" },
-  { userId: ObjectId('69d2343d94800c8ff0cbb33d'), distanceUnits: "miles", currency: "usd" },
-  { userId: ObjectId('69d2343d94800c8ff0cbb33e'), distanceUnits: "miles", currency: "usd" }
+  // ... repeated for all 5 users
 ]);
 ```
 
@@ -107,50 +115,50 @@ db.UserProfile.insertMany([
 
 ## 📊 Stage 5: Final Assembly (Cars Collection)
 
-The `Cars` collection acts as the central hub of the database. It contains almost no raw text; instead, it is built entirely on pointers (`ObjectId`s) linking the User, the Brand, and the Model together, along with the specific car's mileage.
+The `Cars` collection acts as the central hub of the database. It stores the relationship between a User, a Brand, and a Model, effectively acting as a "Join Table" in document form.
 
 ```javascript
 db.Cars.insertMany([
   { 
-    userId: ObjectId('69d2343d94800c8ff0cbb33a'),     // Owner: John Smith
-    carBrandId: ObjectId('69d230ca94800c8ff0cbb327'), // Brand: Audi
-    carModelId: ObjectId('69d2312294800c8ff0cbb328'), // Model: TT
+    userId: ObjectId('69d2343d94800c8ff0cbb33a'),     // John Smith
+    carBrandId: ObjectId('69d230ca94800c8ff0cbb327'), // Audi
+    carModelId: ObjectId('69d2339c94800c8ff0cbb335'), // TT
     mileage: 12000 
   },
   { 
-    userId: ObjectId('69d2343d94800c8ff0cbb33b'),     // Owner: Emily Johnson
-    carBrandId: ObjectId('69d2323794800c8ff0cbb32d'), // Brand: BMW
-    carModelId: ObjectId('69d2327694800c8ff0cbb331'), // Model: X5
+    userId: ObjectId('69d2343d94800c8ff0cbb33b'),     // Emily Johnson
+    carBrandId: ObjectId('69d231a394800c8ff0cbb329'), // BMW
+    carModelId: ObjectId('69d2339c94800c8ff0cbb336'), // X5
     mileage: 45000 
   },
   { 
-    userId: ObjectId('69d2343d94800c8ff0cbb33c'),     // Owner: Michael Brown
-    carBrandId: ObjectId('69d2323794800c8ff0cbb32e'), // Brand: Ford
-    carModelId: ObjectId('69d2327694800c8ff0cbb332'), // Model: Focus
+    userId: ObjectId('69d2343d94800c8ff0cbb33c'),     // Michael Brown
+    carBrandId: ObjectId('69d231a394800c8ff0cbb32a'), // Ford
+    carModelId: ObjectId('69d2339c94800c8ff0cbb337'), // Focus
     mileage: 89000 
   },
   { 
-    userId: ObjectId('69d2343d94800c8ff0cbb33d'),     // Owner: Sarah Davis
-    carBrandId: ObjectId('69d2323794800c8ff0cbb32f'), // Brand: Porsche
-    carModelId: ObjectId('69d2327694800c8ff0cbb333'), // Model: 911
+    userId: ObjectId('69d2343d94800c8ff0cbb33d'),     // Sarah Davis
+    carBrandId: ObjectId('69d231a394800c8ff0cbb32b'), // Porsche
+    carModelId: ObjectId('69d2339c94800c8ff0cbb338'), // 911
     mileage: 5000 
   },
   { 
-    userId: ObjectId('69d2343d94800c8ff0cbb33e'),     // Owner: David Wilson
-    carBrandId: ObjectId('69d2323794800c8ff0cbb330'), // Brand: Fiat
-    carModelId: ObjectId('69d2327694800c8ff0cbb334'), // Model: 500
+    userId: ObjectId('69d2343d94800c8ff0cbb33e'),     // David Wilson
+    carBrandId: ObjectId('69d231a394800c8ff0cbb32c'), // Fiat
+    carModelId: ObjectId('69d2339c94800c8ff0cbb339'), // 500
     mileage: 32000 
   }
 ]);
 ```
 
-> 💡 **Core Concept:** By storing IDs instead of text, if "Audi" ever changes its name to "Audi AG" in the `CarBrands` collection, the `Cars` collection automatically reflects this change without any data updates. **This is the essence of the relational approach in a non-relational database.**
+> 💡 **Core Concept:** By storing IDs instead of text, if a brand name is updated in its parent collection, the change is automatically reflected across all linked car entries without data duplication.
 
 ---
 
 ## 💻 Stage 6: Execution Log & Verification
 
-Below is the overall execution log from the `mongosh` shell, confirming the successful generation of unique ObjectIds and data validation across all 5 collections.
+Below is the overall execution log from the `mongosh` shell. I used an **Aggregation Pipeline** with `$lookup` to join the collections and verify that all `ObjectId` references correctly resolve to their corresponding human-readable data.
 
 ![Shell Execution Log](./Shell_.png)
 
