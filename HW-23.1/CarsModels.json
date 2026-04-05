@@ -1,0 +1,45 @@
+[{
+  "_id": {
+    "$oid": "69d2339c94800c8ff0cbb335"
+  },
+  "title": "TT",
+  "carBrandId": {
+    "$oid": "69d230ca94800c8ff0cbb327"
+  }
+},
+{
+  "_id": {
+    "$oid": "69d2339c94800c8ff0cbb336"
+  },
+  "title": "X5",
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb32d"
+  }
+},
+{
+  "_id": {
+    "$oid": "69d2339c94800c8ff0cbb337"
+  },
+  "title": "Focus",
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb32e"
+  }
+},
+{
+  "_id": {
+    "$oid": "69d2339c94800c8ff0cbb338"
+  },
+  "title": "911",
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb32f"
+  }
+},
+{
+  "_id": {
+    "$oid": "69d2339c94800c8ff0cbb339"
+  },
+  "title": "500",
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb330"
+  }
+}]

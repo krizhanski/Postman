@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "69d2351e94800c8ff0cbb344"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33a"
+  },
+  "carBrandId": {
+    "$oid": "69d230ca94800c8ff0cbb327"
+  },
+  "carModelId": {
+    "$oid": "69d2312294800c8ff0cbb328"
+  },
+  "mileage": 12000
+},
+{
+  "_id": {
+    "$oid": "69d2351e94800c8ff0cbb345"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33b"
+  },
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb32d"
+  },
+  "carModelId": {
+    "$oid": "69d2327694800c8ff0cbb331"
+  },
+  "mileage": 45000
+},
+{
+  "_id": {
+    "$oid": "69d2351e94800c8ff0cbb346"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33c"
+  },
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb32e"
+  },
+  "carModelId": {
+    "$oid": "69d2327694800c8ff0cbb332"
+  },
+  "mileage": 89000
+},
+{
+  "_id": {
+    "$oid": "69d2351e94800c8ff0cbb347"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33d"
+  },
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb32f"
+  },
+  "carModelId": {
+    "$oid": "69d2327694800c8ff0cbb333"
+  },
+  "mileage": 5000
+},
+{
+  "_id": {
+    "$oid": "69d2351e94800c8ff0cbb348"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33e"
+  },
+  "carBrandId": {
+    "$oid": "69d2323794800c8ff0cbb330"
+  },
+  "carModelId": {
+    "$oid": "69d2327694800c8ff0cbb334"
+  },
+  "mileage": 32000
+}]

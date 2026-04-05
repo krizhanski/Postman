@@ -1,0 +1,50 @@
+[{
+  "_id": {
+    "$oid": "69d2347894800c8ff0cbb33f"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33a"
+  },
+  "distanceUnits": "miles",
+  "currency": "usd"
+},
+{
+  "_id": {
+    "$oid": "69d2347894800c8ff0cbb340"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33b"
+  },
+  "distanceUnits": "miles",
+  "currency": "usd"
+},
+{
+  "_id": {
+    "$oid": "69d2347894800c8ff0cbb341"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33c"
+  },
+  "distanceUnits": "miles",
+  "currency": "usd"
+},
+{
+  "_id": {
+    "$oid": "69d2347894800c8ff0cbb342"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33d"
+  },
+  "distanceUnits": "miles",
+  "currency": "usd"
+},
+{
+  "_id": {
+    "$oid": "69d2347894800c8ff0cbb343"
+  },
+  "userId": {
+    "$oid": "69d2343d94800c8ff0cbb33e"
+  },
+  "distanceUnits": "miles",
+  "currency": "usd"
+}]

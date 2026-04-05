@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "69d230ca94800c8ff0cbb327"
+  },
+  "title": "Audi",
+  "logoFilename": "audi.png"
+},
+{
+  "_id": {
+    "$oid": "69d231a394800c8ff0cbb329"
+  },
+  "title": "BMW",
+  "logoFilename": "bmw.png"
+},
+{
+  "_id": {
+    "$oid": "69d231a394800c8ff0cbb32a"
+  },
+  "title": "Ford",
+  "logoFilename": "ford.png"
+},
+{
+  "_id": {
+    "$oid": "69d231a394800c8ff0cbb32b"
+  },
+  "title": "Porsche",
+  "logoFilename": "porsche.png"
+},
+{
+  "_id": {
+    "$oid": "69d231a394800c8ff0cbb32c"
+  },
+  "title": "Fiat",
+  "logoFilename": "fiat.png"
+}]
