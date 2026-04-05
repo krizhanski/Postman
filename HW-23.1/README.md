@@ -3,7 +3,7 @@
 ## 📌 Project Overview
 The main objective of this task is to use the existing SQL database schema as a reference to implement several MongoDB collections that preserve the core business logic of the `qauto` application. In simple terms, this project demonstrates a partial data migration to MongoDB. Additionally, the assignment focuses on implementing **Document Referencing** (linking documents via `ObjectId`), establishing 1:1 and One-to-Many relationships, and troubleshooting environment data duplication issues.
 
-![Database Schema](./Schema1.png)
+![Database Schema](./Schema_.png)
 
 ## 🛠 Tech Stack
 * **Database:** MongoDB Community Server
@@ -152,15 +152,15 @@ db.Cars.insertMany([
 
 Below is the overall execution log from the `mongosh` shell, confirming the successful generation of unique ObjectIds and data validation across all 5 collections.
 
-![Shell Execution Log](./Shell.png)
+![Shell Execution Log](./Shell_.png)
 
 ### Exported Data Files
 The final, verified collections were exported to JSON format for review:
-* 📄 [CarBrands.json](./CarBrands.json)
-* 📄 [CarsModels.json](./CarsModels.json)
-* 📄 [Users.json](./Users.json)
-* 📄 [UserProfile.json](./UserProfile.json)
-* 📄 [Cars.json](./Cars.json)
+* 📄 [CarBrands.json](./Car_Brands.json)
+* 📄 [CarsModels.json](./Cars_Models.json)
+* 📄 [Users.json](./Users_.json)
+* 📄 [UserProfile.json](./User_Profile.json)
+* 📄 [Cars.json](./Cars_.json)
 
 ---
 
