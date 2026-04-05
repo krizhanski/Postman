@@ -3,7 +3,7 @@
 ## 📌 Project Overview
 The main objective of this task is to use the existing SQL database schema as a reference to implement several MongoDB collections that preserve the core business logic of the `qauto` application. In simple terms, this project demonstrates a partial data migration to MongoDB. Additionally, the assignment focuses on implementing **Document Referencing** (linking documents via `ObjectId`), establishing 1:1 and One-to-Many relationships, and troubleshooting environment data duplication issues.
 
-![Database Schema](./Schema.png)
+![Database Schema](./Schema1.png)
 
 ## 🛠 Tech Stack
 * **Database:** MongoDB Community Server
