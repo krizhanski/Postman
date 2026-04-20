@@ -6,7 +6,7 @@ Welcome to my comprehensive QA portfolio repository! This project contains API t
 
 The repository is organized by modules and homework assignments. Each folder contains exported collections, environment configurations, and documentation.
 
-### 📁 [HW-13.1-QAuto-API](./HW-13.1)
+### 📁 [HW-13.1-QAuto-API](./HW-13.1-QAuto-API)
 **Focus:** Basic API flow automation, environment setup, dynamic variables, and negative testing.  
 **Key Scenarios:** Dynamic user registration, authentication (Login/Logout), password validation rules, and basic entity creation (Cars & Expenses).
 
